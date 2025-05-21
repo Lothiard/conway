@@ -8,7 +8,7 @@
 void print(std::vector<std::vector<bool>>& grid) {
     for(const auto& row : grid) {
         for(bool cell : row) {
-            std::cout << (cell ? 'O' : '.') << ' ';
+            std::cout << (cell ? '#' : ' ') << ' ';
         }
         std::cout << '\n';
     }
@@ -17,7 +17,7 @@ void print(std::vector<std::vector<bool>>& grid) {
 void init(std::vector<std::vector<bool>>& grid, int width, int height) {
     for(int i = 0; i < width; ++i) {
         for(int j = 0; j < height; ++j) {
-            if(rand() % 10 == 0) {
+            if(rand() % 4 == 0) {
                 grid[i][j] = true;
             } else {
                 grid[i][j] = false;
@@ -45,20 +45,28 @@ int countNeighbours(std::vector<std::vector<bool>>& grid, int x, int y) {
     return count;
 }
 
-void calculate(std::vector<std::vector<bool>>& grid) {
+std::vector<std::vector<bool>> calculate(std::vector<std::vector<bool>>& current) {
     // < 2 neighbours = death
     // 2 || 3 neighbours = lives
     // > 3 neighbours = death
 
-    int width = grid.size();
-    int height = grid[0].size();
+    int width = current.size();
+    int height = current[0].size();
+
+    std::vector<std::vector<bool>> next(height, std::vector<bool>(width));
 
     for(int i = 0; i < width; ++i) {
         for(int j = 0; j < height; ++j) {
-            if(countNeighbours(grid, i, j) < 2 || countNeighbours(grid, i, j) > 3) { grid[i][j] = false; }
-            else { grid[i][j] = true; }
+            if(current[i][j]) {
+                if(countNeighbours(current, i, j) < 2 || countNeighbours(current, i, j) > 3) { next[i][j] = false; }
+                else { next[i][j] = true; }
+            } else {
+                if(countNeighbours(current, i, j) == 3) { next[i][j] = true; }
+            }
         }
     }
+
+    return next;
 }
 
 int main(int argc, char* argv[]) {
@@ -76,9 +84,9 @@ int main(int argc, char* argv[]) {
     init(grid, width, height);
 
     while(true) {
-        calculate(grid);
+        grid = calculate(grid);
         print(grid);
-        sleep(1);
+        usleep(50000);
         std::cout << "\x1B[2J\x1B[H";
     }
 }
