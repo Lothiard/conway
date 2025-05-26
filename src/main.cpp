@@ -24,7 +24,8 @@ int main(int argc, char* argv[]) {
     Grid grid(width, height);
     grid.randomize();
 
-    sf::RenderWindow window(sf::VideoMode({CELL_SIZE * width, CELL_SIZE * height}), "conway", sf::Style::Titlebar | sf::Style::Close);
+    sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+    sf::RenderWindow window(desktop, "conway", sf::Style::Fullscreen);
     window.setFramerateLimit(60);
 
     sf::RectangleShape cellShape({CELL_SIZE - .1f, CELL_SIZE - .1f});
