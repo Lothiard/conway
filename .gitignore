@@ -5,6 +5,11 @@
 /Makefile
 /cmake_install.cmake
 
+# Clangd cache files
+.cache/
+**/*.idx
+.clangd/
+
 # Executables
 *.out
 *.exe
