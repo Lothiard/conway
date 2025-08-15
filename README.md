@@ -1,3 +1,3 @@
 # conway
 
-![video](media/conway.mp4)
+![video](media/conway.gif)
